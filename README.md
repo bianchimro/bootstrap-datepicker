@@ -1,10 +1,10 @@
-# Home
+# This fork
 
-This is a fork of Stefan Petre's [original code](http://www.eyecon.ro/bootstrap-datepicker/);
-thanks go to him for getting this thing started!
+This is a fork of the [github version](https://github.com/eternicode/bootstrap-datepicker) by @eternicode of bootstrap-datepicker, which in turn is based on Stefan Petre's [original code](http://www.eyecon.ro/bootstrap-datepicker/)
 
-Please note that this fork is not used on Stefan's page at this time, nor is it maintained or
-contributed to by him (yet?)
+I created this fork to add validations functions to datePicer, as I need it in a project I am working on.
+It basically adds the "validations" key to available options, and a setValidation function.
+
 
 # Example
 
@@ -145,6 +145,20 @@ The view that the datepicker should show when it is opened.  Accepts values of 0
 String.  Default: 'en'
 
 The two-letter code of the language to use for month and day names.  These will also be used as the input's value (and subsequently sent to the server in the case of form submissions).  Currently ships with English ('en'), German ('de'), Brazilian ('br'), and Spanish ('es') translations, but others can be added (see I18N below).  If an unknown language code is given, English will be used.
+
+
+###  validations
+
+List of objects
+Each object must have the following properties:
+
+* *func* : a function returning true if validation passes and false if not. If the function call fails, validation does not pass. The function is called passing in these arguments (in this order):
+	* *formattedValue*: the formatted date that is going to be set
+	* *date*: the js date that is going to be set
+	* *picker*: the datepicker instance	
+	
+* *errorCallback* (optional): a function with the same parameters as *func*, that gets executed if validation fails
+* *setterCallback* (optional): a function with the same parameters as *func*, that gets executed if  validation fails. If *errorCallback* is defined, it gets executed before *setterCallback*
 
 ## Markup
 
