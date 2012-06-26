@@ -94,6 +94,11 @@
 		this.endDate = Infinity;
 		this.setStartDate(options.startDate||this.element.data('date-startdate'));
 		this.setEndDate(options.endDate||this.element.data('date-enddate'));
+
+        this.validations = (options.validations || []);
+        this.lastTestedValue = null;
+
+
 		this.fillDow();
 		this.fillMonths();
 		this.update();
@@ -163,14 +168,77 @@
 		},
 
 		setValue: function() {
+			
 			var formatted = DPGlobal.formatDate(this.date, this.format, this.language);
+			//#TODO: REMOVE oldValue - useless right now
+			var oldValue;
+			
+			if(this.lastTestedValue == formatted)
+			    return;
+		    
+		    this.lastTestedValue = formatted;
+            
+            if(this.validations.length){
+                var numValidations = this.validations.length;
+                for (var i=0; i< numValidations; i++){
+                    var validation = this.validations[i];
+                    var func = validation.func;
+                    var result;
+                    try{
+                        result = func(formatted, this.date, this);
+                    } catch(err){
+                        result = false;
+                        console.error(err);
+                    }
+                    
+                    if(result !== true){
+                        
+                        //error callback
+                        var errorCallback = validation.errorCallback;
+                        if(errorCallback instanceof Function){
+                            errorCallback(formatted, this.date, this);
+                        }
+
+                        //setter callback
+                        var newValue;                        
+                        var setterCallback = validation.setterCallback;
+                        if(setterCallback instanceof Function){
+                            newValue = setterCallback(formatted, this.date, this);
+                        } else {
+                            newValue = this.element.data('old-date');
+                        
+                        }
+                        
+                        if (this.component){
+				           this.element.find('input').prop('value', newValue);
+        				}
+                        
+                        if (!this.isInput) {
+                            this.element.data('data', newValue);                            
+                        } else {
+
+                            this.element.prop('value', newValue);
+                        }
+                        this.update();
+                        return;
+                    }
+                
+                }
+                
+            }
+            
+            
 			if (!this.isInput) {
 				if (this.component){
-					this.element.find('input').prop('value', formatted);
+				    this.element.find('input').prop('value', formatted);
 				}
+				oldValue = this.element.data('date');
 				this.element.data('date', formatted);
+				this.element.data('old-date', formatted);
 			} else {
+				oldValue = this.element.prop('value');
 				this.element.prop('value', formatted);
+				this.element.data('old-date', formatted);
 			}
 		},
 
@@ -190,6 +258,11 @@
 			}
 			this.update();
 			this.updateNavArrows();
+		},
+		
+		setValidations: function(validations){
+		    //should check type and objs properties
+		    this.validations = validations;
 		},
 
 		place: function(){
