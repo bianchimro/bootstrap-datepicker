@@ -158,7 +158,7 @@ Each object must have the following properties:
 	* *picker*: the datepicker instance	
 	
 * *errorCallback* (optional): a function with the same parameters as *func*, that gets executed if validation fails
-* *setterCallback* (optional): a function with the same parameters as *func*, that gets executed if  validation fails. If *errorCallback* is defined, it gets executed before *setterCallback*
+* *setterCallback* (optional): a function with the same parameters as *func*, that gets executed if  validation fails. If *errorCallback* is defined, it gets executed before *setterCallback*. This function should return the value to be set if validation fails. If the function is not defined, previous value is set.
 
 ## Markup
 
