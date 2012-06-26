@@ -178,7 +178,7 @@
 		    
 		    this.lastTestedValue = formatted;
             
-            if(this.validations.length){
+            if(this.validations && this.validations.length){
                 var numValidations = this.validations.length;
                 for (var i=0; i< numValidations; i++){
                     var validation = this.validations[i];
