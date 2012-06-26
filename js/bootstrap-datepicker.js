@@ -95,7 +95,7 @@
 		this.setStartDate(options.startDate||this.element.data('date-startdate'));
 		this.setEndDate(options.endDate||this.element.data('date-enddate'));
 
-        this.validations = (options.validations || []);
+        this.validations = this.setValidations(options.validations || []);
         this.lastTestedValue = null;
 
 
